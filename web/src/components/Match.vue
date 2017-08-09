@@ -32,15 +32,15 @@
                 </p>
               </div>
               <div class="columns is-multiline is-mobile">
-                <div class="column is-half mp-user-column" v-for="(score, uid) in game.Scores" :key="uid">
+                <div class="column is-half mp-user-column" v-for="uid in sortByScore(game.Scores)" :key="uid">
                   <a :href="'https://ripple.moe/u/' + uid" target="_blank" class="force32">
                     <img :src="'https://a.ripple.moe/' + uid" class="force32">
                   </a>
                   <span style="margin-left: 5px">
                     {{ users[uid] ? users[uid].username : "..." }}
                     &mdash;
-                    {{ score.Score.toLocaleString() }}
-                    <small>{{ getScoreMods(score.Mods) }}</small>
+                    {{ game.Scores[uid].Score.toLocaleString() }}
+                    <small>{{ getScoreMods(game.Scores[uid].Mods) }}</small>
                   </span>
                 </div>
               </div>
@@ -177,7 +177,12 @@ export default {
     evtSrc && evtSrc.close()
   },
   methods: {
-    getScoreMods: getScoreMods
+    getScoreMods: getScoreMods,
+    sortByScore (scores) {
+      return Object.keys(scores).sort((a, b) => {
+        return scores[a].Score < scores[b].Score
+      })
+    }
   }
 }
 </script>
