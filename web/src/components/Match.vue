@@ -169,8 +169,10 @@ export default {
         return
       }
       let newGame = JSON.parse(e.data)
-      this.games.unshift(newGame)
-      loadNewEntities(this)
+      if (newGame.MatchID === this.$route.params.id) {
+        this.games.unshift(newGame)
+        loadNewEntities(this)
+      }
     }
   },
   destroyed () {
