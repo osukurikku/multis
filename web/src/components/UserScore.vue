@@ -5,10 +5,16 @@
       <img :src="'https://a.ripple.moe/' + uid" class="force32">
     </a>
     <span style="margin-left: 5px">
-      {{ users[uid] ? users[uid].username : "..." }}
-      &mdash;
-      {{ score.Score.toLocaleString() }}
-      <small>{{ scoreMods(score.Mods) }}</small>
+      <span>
+        {{ users[uid] ? users[uid].username : "..." }}
+        &mdash;
+        {{ score.Score.toLocaleString() }}
+        <small>{{ scoreMods(score.Mods) }}</small>
+      </span>
+      <span class="icon">
+        <i class="fa fa-times" v-if="score.Failed" title="Failed (including at the end)"></i>
+        <i class="fa fa-wheelchair-alt" v-else-if="!score.Pass" title="Not passed (hp restored before the end), also displayed on older games"></i>
+      </span>
     </span>
   </div>
 </template>

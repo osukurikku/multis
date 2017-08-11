@@ -45,7 +45,7 @@ func Matches(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 type jsonScore struct {
 	Score  int64 `json:"score"`
 	Mods   int64 `json:"mods"`
-	Passed bool  `json:"passed"`
+	Pass   bool  `json:"pass"`
 	Failed bool  `json:"failed"`
 	Team   int   `json:"team"`
 }
@@ -53,7 +53,7 @@ type jsonScore struct {
 type jsonScoreCamel struct {
 	Score  int64
 	Mods   int64
-	Passed bool
+	Pass   bool
 	Failed bool
 	Team   int
 }
