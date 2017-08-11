@@ -19,7 +19,8 @@
           <div class="media-content">
             <div class="content">
               <p>
-                <strong>{{ match.Name }}</strong> <timeago :since="match.CreatedAt" :title="match.CreatedAt"></timeago>
+                <strong>{{ match.Name }}</strong>
+                <timeago auto-update="30" :since="match.CreatedAt" :title="match.CreatedAt"></timeago>
               </p>
             </div>
           </div>
