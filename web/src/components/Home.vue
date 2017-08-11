@@ -29,7 +29,7 @@
             </a>
           </div>
         </article>
-        <paginator v-model="page" :right-disabled="matches.length <= 100"></paginator>
+        <paginator v-model="page" :right-disabled="matches.length < 100"></paginator>
       </div>
     </section>
   </div>
