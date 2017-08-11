@@ -14,42 +14,13 @@
         <div class="box" v-if="games.length > 0">
           <p>Latest played games at the top!</p>
           <br>
-          <article class="media" v-for="game in games" :key="game.ID">
-            <figure class="media-left" v-if="beatmaps[game.BeatmapID]">
-              <img :src="'https://b.ppy.sh/thumb/' + beatmaps[game.BeatmapID].beatmapset_id + 'l.jpg'" style="width: 100px; max-height: 220px">
-            </figure>
-            <div class="media-content">
-              <div class="content">
-                <p>
-                  <strong>{{ game.Name }}</strong><br>
-                  <span v-if="beatmaps[game.BeatmapID]">
-                    <span :class="'osu-icon mode-' + game.GameMode"></span>
-                    <a :href="'https://osu.ppy.sh/b/' + game.BeatmapID" target="_blank">
-                      {{ beatmaps[game.BeatmapID].song_name }}
-                    </a>
-                    {{ getScoreMods(game.Mods) }}
-                  </span>
-                </p>
-              </div>
-              <div class="columns is-multiline is-mobile">
-                <div class="column is-half mp-user-column" v-for="uid in sortByScore(game.Scores)" :key="uid">
-                  <div :class="'team-indicator team-' + game.Scores[uid].Team"></div>
-                  <a :href="'https://ripple.moe/u/' + uid" target="_blank" class="force32">
-                    <img :src="'https://a.ripple.moe/' + uid" class="force32">
-                  </a>
-                  <span style="margin-left: 5px">
-                    {{ users[uid] ? users[uid].username : "..." }}
-                    &mdash;
-                    {{ game.Scores[uid].Score.toLocaleString() }}
-                    <small>{{ getScoreMods(game.Scores[uid].Mods) }}</small>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="media-right">
-              <timeago :since="game.CreatedAt" :title="game.CreatedAt"></timeago>
-            </div>
-          </article>
+          <game
+            v-for="game in games"
+            :key="game.ID"
+            :game="game"
+            :users="users"
+            :beatmaps="beatmaps">
+          </game>
         </div>
       </div>
     </section>
@@ -60,61 +31,7 @@
 import store from '../store'
 import api from '../api'
 import Hero from './Hero'
-
-const getScoreMods = m => {
-  var r = []
-
-  // has nc => remove dt
-  if ((m & 512) === 512) {
-    m = m & ~64
-  }
-  // has pf => remove sd
-  if ((m & 16384) === 16384) {
-    m = m & ~32
-  }
-
-  modsString.forEach(function (v, idx) {
-    var val = 1 << idx
-    if ((m & val) > 0) {
-      r.push(v)
-    }
-  })
-  if (r.length > 0) {
-    return '+ ' + r.join(', ')
-  }
-  return ''
-}
-
-const modsString = [
-  'NF',
-  'EZ',
-  'NV',
-  'HD',
-  'HR',
-  'SD',
-  'DT',
-  'RX',
-  'HT',
-  'NC',
-  'FL',
-  'AU', // Auto.
-  'SO',
-  'AP', // Autopilot.
-  'PF',
-  'K4',
-  'K5',
-  'K6',
-  'K7',
-  'K8',
-  'K9',
-  'RN', // Random
-  'LM', // LastMod. Cinema?
-  'K9',
-  'K0',
-  'K1',
-  'K3',
-  'K2'
-]
+import Game from './Game'
 
 // loads new users and beatmaps
 const loadNewEntities = component => {
@@ -144,7 +61,8 @@ let evtSrc
 
 export default {
   components: {
-    Hero
+    Hero,
+    Game
   },
   data () {
     return {
@@ -178,14 +96,6 @@ export default {
   },
   destroyed () {
     evtSrc && evtSrc.close()
-  },
-  methods: {
-    getScoreMods: getScoreMods,
-    sortByScore (scores) {
-      return Object.keys(scores).sort((a, b) => {
-        return scores[a].Score < scores[b].Score
-      })
-    }
   }
 }
 </script>
@@ -209,24 +119,4 @@ export default {
 .mode-2:before { content: '\e801' }
 .mode-3:before { content: '\e802' }
 .osu-logo:before { content: '\e805' }
-</style>
-
-<style>
-.mp-user-column {
-  display: flex;
-  align-items: center;
-}
-.force32 {
-  height: 32px;
-  width: 32px;
-}
-
-.team-indicator {
-  width: 6px;
-  height: 32px;
-  margin-right: 5px;
-}
-.team-indicator.team-0 { background: #e5e5e5 }
-.team-indicator.team-1 { background: #0074db }
-.team-indicator.team-2 { background: #dd300d }
 </style>
