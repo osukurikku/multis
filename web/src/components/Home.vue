@@ -20,7 +20,7 @@
             <div class="content">
               <p>
                 <strong>{{ match.Name }}</strong>
-                <timeago auto-update="30" :since="match.CreatedAt" :title="match.CreatedAt"></timeago>
+                <timeago :auto-update="30" :since="match.CreatedAt" :title="match.CreatedAt"></timeago>
               </p>
             </div>
           </div>
@@ -55,6 +55,12 @@ export default {
   },
   mounted () {
     this.loadMatches()
+  },
+  watch: {
+    page () {
+      console.log('memes')
+      this.loadMatches()
+    }
   },
   methods: {
     loadMatches () {

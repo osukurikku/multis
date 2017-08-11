@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="media-right">
-      <timeago auto-update="30" :since="game.CreatedAt" :title="game.CreatedAt"></timeago>
+      <timeago :auto-update="30" :since="game.CreatedAt" :title="game.CreatedAt"></timeago>
     </div>
   </article>
 </template>
