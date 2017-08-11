@@ -33,6 +33,7 @@
               </div>
               <div class="columns is-multiline is-mobile">
                 <div class="column is-half mp-user-column" v-for="uid in sortByScore(game.Scores)" :key="uid">
+                  <div :class="'team-indicator team-' + game.Scores[uid].Team"></div>
                   <a :href="'https://ripple.moe/u/' + uid" target="_blank" class="force32">
                     <img :src="'https://a.ripple.moe/' + uid" class="force32">
                   </a>
@@ -219,4 +220,13 @@ export default {
   height: 32px;
   width: 32px;
 }
+
+.team-indicator {
+  width: 6px;
+  height: 32px;
+  margin-right: 5px;
+}
+.team-indicator.team-0 { background: #e5e5e5 }
+.team-indicator.team-1 { background: #0074db }
+.team-indicator.team-2 { background: #dd300d }
 </style>
