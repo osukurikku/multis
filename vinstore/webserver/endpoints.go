@@ -43,13 +43,17 @@ func Matches(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 type jsonScore struct {
-	Score int64 `json:"score"`
-	Mods  int64 `json:"mods"`
+	Score  int64 `json:"score"`
+	Mods   int64 `json:"mods"`
+	Passed bool  `json:"passed"`
+	Failed bool  `json:"failed"`
 }
 
 type jsonScoreCamel struct {
-	Score int64
-	Mods  int64
+	Score  int64
+	Mods   int64
+	Passed bool
+	Failed bool
 }
 
 func (j *jsonScoreCamel) UnmarshalJSON(data []byte) error {
