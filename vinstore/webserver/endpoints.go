@@ -47,6 +47,7 @@ type jsonScore struct {
 	Mods   int64 `json:"mods"`
 	Passed bool  `json:"passed"`
 	Failed bool  `json:"failed"`
+	Team   int   `json:"team"`
 }
 
 type jsonScoreCamel struct {
@@ -54,6 +55,7 @@ type jsonScoreCamel struct {
 	Mods   int64
 	Passed bool
 	Failed bool
+	Team   int
 }
 
 func (j *jsonScoreCamel) UnmarshalJSON(data []byte) error {
