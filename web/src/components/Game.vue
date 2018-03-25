@@ -9,7 +9,7 @@
           <strong>{{ game.Name }}</strong><br>
           <span v-if="beatmaps[game.BeatmapID]">
             <span :class="'osu-icon mode-' + game.GameMode"></span>
-            <a :href="'https://osu.ppy.sh/b/' + game.BeatmapID" target="_blank">
+            <a :href="'https://ripple.moe/b/' + game.BeatmapID" target="_blank">
               {{ beatmaps[game.BeatmapID].song_name }}
             </a>
             {{ scoreMods(game.Mods) }}
