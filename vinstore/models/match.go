@@ -4,9 +4,11 @@ import "time"
 
 // Match represents a multiplayer match on Ripple.
 type Match struct {
-	ID        int64 `gorm:"primary_key" json:",string"`
-	Name      string
-	CreatedAt time.Time
+	ID           int64 `gorm:"primary_key" json:",string"`
+	Name         string
+	HostID       int
+	HostUserName string
+	CreatedAt    time.Time
 }
 
 // GenerateMatchID creates the ID of the match.

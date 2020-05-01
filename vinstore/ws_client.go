@@ -43,12 +43,14 @@ func (c *Client) Pinger(conn *websocket.Conn) {
 // WSGame is a multiplayer game that has just been finished, as represented by
 // the Ripple API.
 type WSGame struct {
-	BeatmapID int             `json:"beatmap_id"`
-	GameMode  int             `json:"game_mode"`
-	ID        int             `json:"id"`
-	Mods      int64           `json:"mods"`
-	Name      string          `json:"name"`
-	Scores    json.RawMessage `json:"scores"`
+	BeatmapID    int             `json:"beatmap_id"`
+	GameMode     int             `json:"game_mode"`
+	ID           int             `json:"id"`
+	Mods         int64           `json:"mods"`
+	Name         string          `json:"name"`
+	HostID       int             `json:"host_id"`
+	HostUserName string          `json:"host_user_name"`
+	Scores       json.RawMessage `json:"scores"`
 }
 
 // NewCompletedMatch handles messages of type new_completed_match.
@@ -77,8 +79,10 @@ func (c *Client) NewCompletedMatch(m Message, _ *websocket.Conn) {
 	if mr.ID == 0 {
 		// Match doesn't exist, we need to create it
 		c.DB.Create(&models.Match{
-			ID:   matchID,
-			Name: game.Name,
+			ID:           matchID,
+			Name:         game.Name,
+			HostID:       game.HostID,
+			HostUserName: game.HostUserName,
 		})
 		c.DB.Create(&models.MatchRedirect{
 			ID:        matchID,
@@ -94,12 +98,14 @@ func (c *Client) NewCompletedMatch(m Message, _ *websocket.Conn) {
 	}
 
 	createdGame := models.Game{
-		MatchID:   mr.CanonicID,
-		Name:      game.Name,
-		BeatmapID: game.BeatmapID,
-		Mods:      game.Mods,
-		GameMode:  game.GameMode,
-		Scores:    string(game.Scores),
+		MatchID:      mr.CanonicID,
+		Name:         game.Name,
+		BeatmapID:    game.BeatmapID,
+		Mods:         game.Mods,
+		GameMode:     game.GameMode,
+		HostID:       game.HostID,
+		HostUserName: game.HostUserName,
+		Scores:       string(game.Scores),
 	}
 	c.DB.Create(&createdGame)
 

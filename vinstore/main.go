@@ -25,7 +25,7 @@ func main() {
 	go webserver.Start("127.0.0.1:51512")
 
 	c := &Client{
-		DB: db,
+		DB:       db,
 	}
 	typeMap := c.GenerateTypeMap()
 

@@ -15,7 +15,6 @@ func Create(dsn string) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	//db = db.Debug()
 
 	db.AutoMigrate(&DBVersion{})
