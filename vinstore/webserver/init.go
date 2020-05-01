@@ -12,9 +12,9 @@ import (
 func Start(addr string) error {
 	r := httprouter.New()
 
-	r.GET("/api/matches", Matches)
-	r.GET("/api/games", Games)
-	r.GET("/api/new_games", NewGames)
+	r.GET("/multi/api/matches", Matches)
+	r.GET("/multi/api/games", Games)
+	r.GET("/multi/api/new_games", NewGames)
 
 	return http.ListenAndServe(addr, r)
 }

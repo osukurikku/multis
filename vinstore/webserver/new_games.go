@@ -7,7 +7,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/julienschmidt/sse"
-	"zxq.co/ripple/vinse/vinstore/models"
+	"github.com/osukurikku/multis/vinstore/models"
 )
 
 var streamer = sse.New()

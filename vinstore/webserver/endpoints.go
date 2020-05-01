@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/julienschmidt/httprouter"
-	"zxq.co/ripple/vinse/vinstore/models"
+	"github.com/osukurikku/multis/vinstore/models"
 )
 
 func atoiMin(s string, def int) int {

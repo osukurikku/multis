@@ -7,8 +7,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/jinzhu/gorm"
-	"zxq.co/ripple/vinse/vinstore/models"
-	"zxq.co/ripple/vinse/vinstore/webserver"
+	"github.com/osukurikku/multis/vinstore/models"
+	"github.com/osukurikku/multis/vinstore/webserver"
 )
 
 // Client specifies how to handle the messages received from the Ripple

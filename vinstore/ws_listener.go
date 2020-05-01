@@ -7,7 +7,7 @@ import (
 )
 
 // WebSocketURL is the Ripple API endpoint that accepts websocket connections.
-const WebSocketURL = "wss://api.ripple.moe/api/v1/ws"
+const WebSocketURL = "wss://kurikku.pw/api/v1/ws"
 
 // ListenToWS connects to the Ripple WebSocket API and listens to new messages.
 // Once a new message is received, it forwards it to the correct function

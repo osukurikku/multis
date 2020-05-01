@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"zxq.co/ripple/vinse/vinstore/models"
-	"zxq.co/ripple/vinse/vinstore/webserver"
+	"github.com/osukurikku/multis/vinstore/models"
+	"github.com/osukurikku/multis/vinstore/webserver"
 )
 
 func main() {
@@ -20,9 +20,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Listening on", ":51512")
+	fmt.Println("Listening on", "127.0.0.1:51512")
 	webserver.DB = db
-	go webserver.Start(":51512")
+	go webserver.Start("127.0.0.1:51512")
 
 	c := &Client{
 		DB: db,
