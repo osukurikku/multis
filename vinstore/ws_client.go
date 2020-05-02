@@ -1,14 +1,18 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/jinzhu/gorm"
 	"github.com/osukurikku/multis/vinstore/models"
 	"github.com/osukurikku/multis/vinstore/webserver"
+	"golang.org/x/text/encoding/charmap"
+	"golang.org/x/text/transform"
 )
 
 // Client specifies how to handle the messages received from the Ripple
@@ -43,14 +47,17 @@ func (c *Client) Pinger(conn *websocket.Conn) {
 // WSGame is a multiplayer game that has just been finished, as represented by
 // the Ripple API.
 type WSGame struct {
-	BeatmapID    int             `json:"beatmap_id"`
-	GameMode     int             `json:"game_mode"`
-	ID           int             `json:"id"`
-	Mods         int64           `json:"mods"`
-	Name         string          `json:"name"`
-	HostID       int             `json:"host_id"`
-	HostUserName string          `json:"host_user_name"`
-	Scores       json.RawMessage `json:"scores"`
+	BeatmapID          int             `json:"beatmap_id"`
+	GameMode           int             `json:"game_mode"`
+	ID                 int             `json:"id"`
+	Mods               int64           `json:"mods"`
+	Name               string          `json:"name"`
+	HostID             int             `json:"host_id"`
+	HostUserName       string          `json:"host_user_name"`
+	GameType           int             `json:"game_type"`
+	GameScoreCondition int             `json:"game_score_condition"`
+	GameModMode        int             `json:"game_mod_mode"`
+	Scores             json.RawMessage `json:"scores"`
 }
 
 // NewCompletedMatch handles messages of type new_completed_match.
@@ -71,6 +78,15 @@ func (c *Client) NewCompletedMatch(m Message, _ *websocket.Conn) {
 	fmt.Printf("New game received, id: %d (%d)\n", game.ID, matchID)
 
 	oldMatchID := models.GenerateMatchID(game.ID, now.Add(-time.Minute*15))
+
+	// convert iso-8859-1 lobby name to utf-8
+	reader := transform.NewReader(bytes.NewReader([]byte(game.Name)), charmap.ISO8859_1.NewEncoder())
+	normalName, err := ioutil.ReadAll(reader)
+	if err == nil {
+		// all good, convertation suck
+		// now update to our normal lobby name
+		game.Name = string(normalName)
+	}
 
 	// Check if there's already a match redirect for this matchID
 	mr := models.MatchRedirect{}
@@ -98,14 +114,17 @@ func (c *Client) NewCompletedMatch(m Message, _ *websocket.Conn) {
 	}
 
 	createdGame := models.Game{
-		MatchID:      mr.CanonicID,
-		Name:         game.Name,
-		BeatmapID:    game.BeatmapID,
-		Mods:         game.Mods,
-		GameMode:     game.GameMode,
-		HostID:       game.HostID,
-		HostUserName: game.HostUserName,
-		Scores:       string(game.Scores),
+		MatchID:            mr.CanonicID,
+		Name:               game.Name,
+		BeatmapID:          game.BeatmapID,
+		Mods:               game.Mods,
+		GameMode:           game.GameMode,
+		HostID:             game.HostID,
+		HostUserName:       game.HostUserName,
+		GameType:           game.GameType,
+		GameScoreCondition: game.GameScoreCondition,
+		GameModMode:        game.GameModMode,
+		Scores:             string(game.Scores),
 	}
 	c.DB.Create(&createdGame)
 
